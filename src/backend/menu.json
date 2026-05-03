@@ -1,0 +1,438 @@
+[
+  {
+    "title": "Entradas",
+    "items": [
+      {
+        "name": "Choclo Traposo",
+        "desc": "Choclo cocinado salteado con mapahuira, trozos de chorizo y queso fundido.",
+        "price": "$7.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Mote con Chicharrón",
+        "desc": "Mote, chicharrón, papa dorada, encurtido de tomate y cebolla, tostado y maduro frito.",
+        "price": "$7.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Mote Sucio",
+        "desc": "Mote salteado en mapahuira, lomo, granos de choclo tierno, aguacate y cilantro.",
+        "price": "$7.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Tamal",
+        "desc": "",
+        "price": "$3.70",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Quimbolito",
+        "desc": "",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Humita",
+        "desc": "",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Empanada de Gallina",
+        "desc": "",
+        "price": "$5.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Empanada de Morocho",
+        "desc": "3 unidades.",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Empanada de Viento",
+        "desc": "",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Empanada de Verde",
+        "desc": "3 unidades.",
+        "price": "$5.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Festín de Empanadas",
+        "desc": "8 unidades variadas.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Ensaladas",
+    "items": [
+      {
+        "name": "Ensalada Leña Quiteña",
+        "desc": "Lechuga, tomate, aguacate, queso parmesano, cebolla, pimiento, pollo, tocino y maíz dulce.",
+        "price": "$10.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Ensalada César con Camarón",
+        "desc": "Lechuga, croutones, queso parmesano y camarones salteados con aderezo César.",
+        "price": "$10.00",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Platos Típicos",
+    "items": [
+      {
+        "name": "Papas con Cuero",
+        "desc": "En salsa de maní, con arroz, maduro frito, aguacate y tomate.",
+        "price": "$7.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Locro de la Casa",
+        "desc": "Sopa de papa, queso, aguacate y tostado.",
+        "price": "$9.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Cariucho de Cuy",
+        "desc": "1/2 cuy al horno con papas en salsa de maní, lechuga, tomate y aguacate.",
+        "price": "$21.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Seco de Chivo",
+        "desc": "Carne de borrego, arroz, aguacate, lechuga, tomate, papa y maduro.",
+        "price": "$12.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Fritada con Llapingacho",
+        "desc": "Fritada, llapingachos, tostado, maduro, ensalada, aguacate y mote.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Chugchucara",
+        "desc": "Fritada, papa dorada, cuero, tostado, mote, chicharrón, empanadita, maduro, aguacate, canguil y ají de maní.",
+        "price": "$16.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Guatita",
+        "desc": "En salsa de maní con papas, arroz, huevo duro y aguacate.",
+        "price": "$7.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Patitas de Cerdo",
+        "desc": "En salsa BBQ o mostaza y miel, con papas crujientes.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Llapingacho con Chorizo",
+        "desc": "Tortillas de papa, chorizo, 2 huevos fritos, ensalada, aguacate, tomate y salsa de maní.",
+        "price": "$9.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Asado de Cordero",
+        "desc": "Cordero asado con papa salteada, salsa de queso y ensalada.",
+        "price": "$14.00",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Cortes de Carne",
+    "items": [
+      {
+        "name": "Ribeye",
+        "desc": "Con chorizo, ensalada, papas salteadas y salsa de la casa.",
+        "price": "$16.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "T-Bone",
+        "desc": "Con chorizo, ensalada, papas salteadas y salsa de la casa.",
+        "price": "$16.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Tomahawk",
+        "desc": "Con papas salteadas y ensalada de temporada.",
+        "price": "$22.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Picaña de Res",
+        "desc": "Con chorizo, ensalada, papas salteadas y salsa verde.",
+        "price": "$16.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Pernil de Cerdo",
+        "desc": "Con tortillas de papa, maduro, aguacate y agrio.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Costilla de Cerdo BBQ",
+        "desc": "En salsa BBQ o mostaza y miel, con papas fritas.",
+        "price": "$16.50",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Menú Infantil y Picadas",
+    "items": [
+      {
+        "name": "Nuggets de Pollo",
+        "desc": "5 unidades con papas fritas y salsa tártara.",
+        "price": "$8.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Deditos de Pollo",
+        "desc": "Crujientes con papas fritas y ensalada.",
+        "price": "$7.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Papa Gorda",
+        "desc": "Papas con queso mozzarella, chorizo y orégano.",
+        "price": "$6.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Alitas x 6",
+        "desc": "Salsas: Búfalo, Mostaza y Miel, BBQ o Maracuyá.",
+        "price": "$9.30",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Alitas x 12",
+        "desc": "Salsas: Búfalo, Mostaza y Miel, BBQ o Maracuyá.",
+        "price": "$16.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Festín x 24 Alitas",
+        "desc": "Salsas: Búfalo, Mostaza y Miel, BBQ o Maracuyá.",
+        "price": "$28.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Super Nachos",
+        "desc": "Con carne al chile, queso cheddar, jalapeño, guacamole y pico de gallo.",
+        "price": "$8.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Picada Cantuña",
+        "desc": "Longaniza, chorizo, jalapeño, carne de res, pollo y papas.",
+        "price": "$12.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Hamburguesa Hawaiana",
+        "desc": "Carne al grill, tocino, cheddar, piña caramelizada.",
+        "price": "$9.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Hamburguesa Leña Quiteña",
+        "desc": "Carne al grill, tocino, cheddar, salsa de champiñones y cebolla caramelizada.",
+        "price": "$9.90",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Tablita Mar y Tierra",
+        "desc": "Lomo de res, cerdo, camarones, calamar, pescado, papas y ensalada.",
+        "price": "$25.00",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Mariscos y Pizza",
+    "items": [
+      {
+        "name": "Trucha Mediterránea",
+        "desc": "Bañada en salsa de mariscos (camarón, conchas, calamar) con papas y ensalada.",
+        "price": "$18.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Ceviche Jipijapa",
+        "desc": "Pescado picudo con maní, limón, chifle y cilantro.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Camarón Reventado",
+        "desc": "Camarones crocantes con papas fritas y salsa tártara.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Pizza en Horno de Leña",
+        "desc": "Jamón, peperoni, hawaiana, salami, mixta, vegetariana o margarita.",
+        "price": "$12.00",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Bebidas",
+    "items": [
+      {
+        "name": "Aguas Aromáticas",
+        "desc": "Bebida caliente.",
+        "price": "$2.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Café",
+        "desc": "Bebida caliente.",
+        "price": "$2.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Chocolate",
+        "desc": "Bebida caliente.",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Colada Morada",
+        "desc": "Bebida caliente.",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Morocho",
+        "desc": "Bebida caliente.",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Canelazo",
+        "desc": "Bebida caliente. Vaso $3.00 / Jarra $13.50.",
+        "price": "$3.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Vino Hervido",
+        "desc": "Copa $5.00 / Jarra $17.00.",
+        "price": "$5.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Jugos Naturales",
+        "desc": "Vaso $2.50 / Jarra $8.50.",
+        "price": "$2.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Limonadas de Sabores",
+        "desc": "Bebida fría.",
+        "price": "$3.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Chicha",
+        "desc": "Vaso $2.50 / Jarra $8.50.",
+        "price": "$2.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Rosero Quiteño",
+        "desc": "Bebida fría tradicional.",
+        "price": "$4.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Sangría",
+        "desc": "Copa $4.50 / Jarra $17.00.",
+        "price": "$4.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Gaseosa",
+        "desc": "Bebida fría.",
+        "price": "$1.75",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Pilsener Grande",
+        "desc": "Cerveza.",
+        "price": "$4.00",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Club Grande",
+        "desc": "Cerveza.",
+        "price": "$4.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Corona",
+        "desc": "Cerveza.",
+        "price": "$4.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Cerveza Artesanal",
+        "desc": "Cerveza artesanal.",
+        "price": "$6.00",
+        "badge": "Disponible"
+      }
+    ]
+  },
+  {
+    "title": "Postres",
+    "items": [
+      {
+        "name": "Pristiños con Miel",
+        "desc": "",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Mousse de Higo",
+        "desc": "",
+        "price": "$3.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Helado de la Casa",
+        "desc": "",
+        "price": "$4.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Milshake",
+        "desc": "",
+        "price": "$4.50",
+        "badge": "Disponible"
+      },
+      {
+        "name": "Brownie de Chocolate",
+        "desc": "",
+        "price": "$4.00",
+        "badge": "Disponible"
+      }
+    ]
+  }
+]

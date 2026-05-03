@@ -1,5 +1,15 @@
+import type { MouseEvent } from "react"
 import { logoRestaurante } from "../assets/logo"
 import NAV_LINKS from "../assets/constants/Navlinks"
+import { useLanguage } from "@/context/LanguageContext"
+
+const navKeys: Record<string, string> = {
+  "#historia": "nav.historia",
+  "#menu": "nav.menu",
+  "#galeria": "nav.galeria",
+  "#resenas": "nav.resenas",
+  "#locales": "nav.locales",
+}
 
 const FacebookIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -21,6 +31,13 @@ const SOCIALS = [
 ]
 
 export default function Footer() {
+  const { t } = useLanguage()
+
+  const openReservationChat = (e: MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    window.dispatchEvent(new CustomEvent("chatbot:open-reservation"))
+  }
+
   return (
     <footer className="site-footer">
       <img
@@ -28,7 +45,7 @@ export default function Footer() {
         alt="Leña Quiteña"
         className="footer-logo"
       />
-      <p className="footer-tagline">El Sabor de la Memoria</p>
+      <p className="footer-tagline">{t("brand.tagline")}</p>
 
       <div className="social-icons">
         {SOCIALS.map((s) => (
@@ -48,16 +65,16 @@ export default function Footer() {
       <nav className="footer-links">
         {NAV_LINKS.map((link) => (
           <a key={link.href} href={link.href}>
-            {link.label}
+            {t(navKeys[link.href])}
           </a>
         ))}
-        <a href="#reservaciones">Reservar</a>
+        <a href="#hero" onClick={openReservationChat}>{t("footer.reserve")}</a>
       </nav>
 
       <p className="footer-copy">
-        © 2025 Leña Quiteña Restaurante · Centro Histórico, Quito – Ecuador
+        {t("footer.copy")}
         <br />
-        Diseñado con 🔥 para preservar el sabor de la memoria
+        {t("footer.credit")}
       </p>
     </footer>
   )

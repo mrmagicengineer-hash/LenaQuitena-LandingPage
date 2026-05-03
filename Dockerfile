@@ -6,7 +6,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
+RUN npx vite build
 
 # ── Etapa 2: Servir con Nginx ──
 FROM nginx:stable-alpine AS production

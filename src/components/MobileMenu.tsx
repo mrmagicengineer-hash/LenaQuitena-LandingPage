@@ -8,6 +8,10 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = ({ isOpen, activeHref, onClose }: MobileMenuProps) => {
+  const openReservationChat = () => {
+    window.dispatchEvent(new CustomEvent("chatbot:open-reservation"))
+  }
+
   return (
     <>
       {/* ── Backdrop ── */}
@@ -71,8 +75,12 @@ const MobileMenu = ({ isOpen, activeHref, onClose }: MobileMenuProps) => {
 
         {/* CTA Button */}
         <Button
-          href="#reservaciones"
-          onClick={onClose}
+          href="#hero"
+          onClick={(e) => {
+            e.preventDefault()
+            onClose()
+            openReservationChat()
+          }}
           variant="primary"
           className="w-full text-center mt-4"
         >

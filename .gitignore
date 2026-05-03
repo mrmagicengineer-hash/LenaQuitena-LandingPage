@@ -22,3 +22,30 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+/generated/prisma
+
+# Environment variables — never commit
+.env
+.env.local
+.env.production
+.env.staging
+.env*.local
+
+# SQLite database
+*.db
+*.db-shm
+*.db-wal
+prisma/*.db
+
+# Uploads
+uploads/
+
+# AI tooling & editor personal config
+.claude/
+src/.claude/
+src/.vscode/
+src/.git_disabled/
+
+# Temp / scratch files
+prompt-improve-uiux.txt
