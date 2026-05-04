@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { motion } from "motion/react";
 
 export default function FadeInScroll({ children }: { children: ReactNode }) {

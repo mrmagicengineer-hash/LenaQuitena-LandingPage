@@ -3,28 +3,6 @@ import { useLanguage } from "@/context/LanguageContext"
 import { useRestaurant, type RestaurantKey } from "@/context/RestaurantContext"
 import { logoSanMarcos, logoLaRonda } from "@/assets/logo"
 
-/* ── Ornamento de llama entre título y tagline ── */
-const FlameSVG = () => (
-  <svg
-    aria-hidden="true"
-    width="20" height="24"
-    viewBox="0 0 20 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M10 0C10 0 14 5 14 9C14 10.8 13.3 12.4 12.2 13.6C13.1 12.2 13.5 10.5 13 9C11.5 11 9 12 9 15C9 17.2 10.8 19 13 19C10.8 21.2 7 22 5 20C3 18 3 14 5 11C5 11 4 13 5 15C6 10 9 7 10 0Z"
-      fill="#E85D1A"
-      opacity="0.9"
-    />
-    <path
-      d="M10 8C10 8 12 11 12 13.5C12 15.4 10.9 17 9.3 17.8C9.8 17 10 16 10 15C9 16 8 17 8 18.5C8 20 9 21 10.5 21C9 22.5 7 23 6 22C5 21 5 19 6 17.5C6 17.5 5.5 18.5 6 19.5C7 17 8.5 15 10 8Z"
-      fill="#F9B23C"
-      opacity="0.8"
-    />
-  </svg>
-)
-
 const RESTAURANT_CARDS: {
   key: RestaurantKey
   logo: string
