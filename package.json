@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "build:server": "tsc --project tsconfig.server.json",
     "render:build": "prisma generate && prisma db push && npm run build:server",
-    "start:server": "node dist/server.js",
+    "start:server": "node dist/backend/server.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "translate": "tsx src/scripts/translate.ts"
