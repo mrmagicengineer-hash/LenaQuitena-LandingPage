@@ -8,7 +8,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci
 
 COPY . .
-RUN npx prisma generate && npm run build:server
+RUN npx prisma generate && npm run build:server && echo '{"type":"commonjs"}' > dist/package.json
 
 EXPOSE 3001
 CMD ["sh", "-c", "npx prisma db push && npm run start:server"]
