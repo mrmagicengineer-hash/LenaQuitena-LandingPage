@@ -93,7 +93,7 @@ const HeroContent = () => {
           className="hero-fade-up mt-8 md:mt-10 flex flex-col items-center w-full"
           style={{ animationDelay: "0.6s" }}
         >
-          <h2 className="text-[#D1B894] text-base md:text-[15px] uppercase tracking-[0.2em] mb-6 font-serif font-light">
+          <h2 className="text-[#D1B894] text-base md:text-[15px] uppercase tracking-[0.2em] mb-6 font-sans font-light">
             Elige un Restaurante
           </h2>
 
@@ -155,7 +155,7 @@ const HeroContent = () => {
 
                     {/* Textos */}
                     <div className="w-full flex flex-col items-center gap-1 mb-1 text-[#F5EDD8]">
-                      <span className="text-lg md:text-[1.1rem] uppercase tracking-widest font-serif leading-tight text-center">
+                      <span className="text-lg md:text-[1.1rem] uppercase tracking-widest font-sans leading-tight text-center">
                         Leña<br />Quiteña
                       </span>
                       <span className={[

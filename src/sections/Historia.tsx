@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useLanguage }  from "@/context/LanguageContext"
 import { useRestaurant } from "@/context/RestaurantContext"
 import { useReveal }    from "@/hooks/useReveal"
+import { useScroll, useTransform, motion } from "motion/react"
 
 const LocationIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
@@ -21,6 +22,12 @@ export default function Historia() {
   const { t } = useLanguage()
   const { selectedRestaurant }  = useRestaurant()
   const { ref: revealRef, inView: observerInView } = useReveal<HTMLElement>({ threshold: 0.08 })
+
+  const { scrollYProgress } = useScroll({
+    target: revealRef,
+    offset: ["start end", "end start"],
+  })
+  const imgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
 
   // Si el usuario seleccionó un restaurante desde el Hero, la sección ya debe
   // estar visible cuando el scroll llega — no esperamos al IntersectionObserver
@@ -97,14 +104,16 @@ export default function Historia() {
       <div className="historia-card-split">
 
         {/* Panel imagen — todas las imágenes apiladas con cross-fade */}
-        <div className="historia-img-panel">
-          {slides.map((s, i) => (
-            <div
-              key={i}
-              className={`historia-img-bg${i === current ? " historia-img-bg--active" : ""}`}
-              style={{ backgroundImage: `url(${s.image})` }}
-            />
-          ))}
+        <div className="historia-img-panel" style={{ overflow: "hidden" }}>
+          <motion.div style={{ y: imgY }} className="absolute inset-0">
+            {slides.map((s, i) => (
+              <div
+                key={i}
+                className={`historia-img-bg${i === current ? " historia-img-bg--active" : ""}`}
+                style={{ backgroundImage: `url(${s.image})` }}
+              />
+            ))}
+          </motion.div>
           <div className="historia-img-overlay" />
           <div className="historia-img-content">
             <span className="historia-img-label">{slide.titleEm}</span>

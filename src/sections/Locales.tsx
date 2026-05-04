@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useLanguage } from "@/context/LanguageContext"
-import { useRestaurant, type RestaurantKey } from "@/context/RestaurantContext"
-import { MapPin, Clock, Phone, CarFront } from "lucide-react"
+import { useRestaurant } from "@/context/RestaurantContext"
+import { MapPin, Clock, Phone } from "lucide-react"
 
 const FacebookIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -70,6 +70,7 @@ export default function Locales() {
   const { selectedRestaurant } = useRestaurant()
 
   const [activeLocalKey, setActiveLocalKey] = useState<LocalKey>("san-marcos")
+  const [mapActive, setMapActive] = useState(false)
 
   useEffect(() => {
     if (selectedRestaurant) setActiveLocalKey(selectedRestaurant)
@@ -102,150 +103,115 @@ export default function Locales() {
 
   const activeLocal = localizedLocales.find((local) => local.key === activeLocalKey) ?? localizedLocales[0]
 
-  const parseHourLine = (line: string) => {
-    const [dayPart, ...timeParts] = line.split(":")
-    return {
-      day: dayPart.trim(),
-      time: timeParts.join(":").trim(),
-    }
-  }
-
   return (
-    <section
-      id="locales"
-      className="locales-section"
-    >
-      <div className="section-header">
-        <span className="section-label locales-label">{t("locales.section.label")}</span>
-        <h2 className="section-title locales-title">
-          {t("locales.section.title")}
-        </h2>
-        <div className="ornament-line">
-          <div className="ornament-dot ornament-dot--naranja" />
-        </div>
+    <section id="locales" className="locales-section">
+
+      {/* Mapa full-screen */}
+      <div
+        className="map-container"
+        onClick={() => setMapActive(true)}
+        onMouseLeave={() => setMapActive(false)}
+      >
+        {!mapActive && (
+          <div style={{ position: "absolute", inset: 0, zIndex: 2, cursor: "pointer" }} />
+        )}
+        <iframe
+          title={activeLocal.mapTitle}
+          src={activeLocal.mapSrc}
+          width="600"
+          height="450"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
 
-      <div className="locales-body locales-map-layout">
-        <div className="locales-tabs map-selectors">
-          <h3>{t("locales.selector.title")}</h3>
-          {localizedLocales.map((local) => (
-            <button
-              key={local.key}
-              type="button"
-              className={`map-selector-btn${local.key === activeLocal.key ? " map-selector-btn--active" : ""}`}
-              onClick={() => setActiveLocalKey(local.key)}
-            >
-              {local.tabLabel}
-            </button>
-          ))}
+      {/* Tarjeta flotante */}
+      <div className="locales-floating-card">
+
+        {/* Encabezado + tabs */}
+        <div className="flex flex-col gap-2 mb-1">
+          <p className="text-[0.62rem] uppercase tracking-widest" style={{ fontFamily: "var(--font-cinzel)", color: "#E8A557" }}>
+            Encuéntranos
+          </p>
+          <h3 className="locales-card-title">{activeLocal.title}</h3>
+          <div className="flex flex-row gap-6">
+            {localizedLocales.map((local) => (
+              <button
+                key={local.key}
+                type="button"
+                className={`map-selector-btn${local.key === activeLocal.key ? " map-selector-btn--active" : ""}`}
+                onClick={() => setActiveLocalKey(local.key)}
+              >
+                {local.tabLabel}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <article className="local-card local-card--on-map flex flex-col gap-6">
-          <h4 className="text-3xl md:text-4xl">{activeLocal.title}</h4>
-
-          <div className="local-info-block">
-            <span className="local-label text-sm md:text-[0.95rem] tracking-wider mb-2 block">
-              <MapPin size={16} style={{ display: "inline", verticalAlign: "-3px", marginRight: "0.4rem" }} />
-              {t("locales.label.address")}
-            </span>
-            <p className="text-[1.05rem] md:text-[1.15rem] leading-relaxed text-[#F5EDD8]/90 font-cormorant">
-              {activeLocal.address.map((line, idx) => (
-                <span key={`${activeLocal.key}-address-${idx}`}>
-                  {line}
-                  {idx < activeLocal.address.length - 1 && <br />}
-                </span>
-              ))}
-            </p>
-          </div>
-
-          <div className="local-info-block">
-            <span className="local-label text-sm md:text-[0.95rem] tracking-wider mb-2 block">
-              <Clock size={16} style={{ display: "inline", verticalAlign: "-3px", marginRight: "0.4rem" }} />
-              {t("locales.label.hours")}
-            </span>
-            <table className="horarios-table w-full text-[1.05rem] md:text-[1.15rem] text-[#F5EDD8]/90 font-cormorant" aria-label={`Horarios ${activeLocal.tabLabel}`}>
-              <tbody>
-                {activeLocal.hours.map((line, idx) => {
-                  const parsed = parseHourLine(line)
-                  return (
-                    <tr key={`${activeLocal.key}-hours-${idx}`}>
-                      <th scope="row" className="text-left font-normal py-1 pr-4">{parsed.day}</th>
-                      <td className="text-right py-1">{parsed.time}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="local-info-block">
-            <span className="local-label text-sm md:text-[0.95rem] tracking-wider mb-1 block">
-              <Phone size={16} style={{ display: "inline", verticalAlign: "-3px", marginRight: "0.4rem" }} />
-              {t("locales.label.contact")}
-            </span>
-            <p className="phone text-[1.05rem] md:text-[1.15rem] text-[#F5EDD8]/90 font-cormorant m-0">
-              {activeLocal.phone ?? t("locales.contact.unavailable")}
-            </p>
-          </div>
-
-          {/* ── SECCIÓN DE PARQUEADERO ── */}
-          {activeLocal.parking && (
-            <div className="local-info-block">
-              <span className="local-label text-sm md:text-[0.95rem] tracking-wider mb-1 block">
-                <CarFront size={16} style={{ display: "inline", verticalAlign: "-3px", marginRight: "0.4rem" }} />
-                Parqueadero
+        {/* DIRECCIÓN */}
+        <div className="flex gap-3 items-start">
+          <MapPin size={16} className="mt-1 shrink-0" style={{ color: "#E8A557" }} />
+          <p className="text-[1.05rem] leading-relaxed" style={{ color: "rgba(245,237,216,0.75)" }}>
+            {activeLocal.address.map((line, idx) => (
+              <span key={`${activeLocal.key}-addr-${idx}`}>
+                {line}{idx < activeLocal.address.length - 1 && <br />}
               </span>
-              <p className="text-[1.05rem] md:text-[1.15rem] leading-relaxed text-[#F5EDD8]/90 font-cormorant m-0">
-                {activeLocal.parking}
+            ))}
+          </p>
+        </div>
+
+        {/* HORARIOS */}
+        <div className="flex gap-3 items-start">
+          <Clock size={16} className="mt-1 shrink-0" style={{ color: "#E8A557" }} />
+          <div className="flex flex-col gap-0.5">
+            {activeLocal.hours.map((line, idx) => (
+              <p key={`${activeLocal.key}-hr-${idx}`}
+                 className="text-[1.05rem] leading-snug"
+                 style={{ color: "rgba(245,237,216,0.90)" }}>
+                {line}
               </p>
-            </div>
-          )}
+            ))}
+          </div>
+        </div>
 
-          {/* ── REDES SOCIALES ── */}
-          <div className="flex gap-8 mt-2">
-            <a
-              href={activeLocal.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-start bg-transparent p-0 border-none cursor-pointer group outline-none"
-            >
-              <span className="mb-1 text-[#F5EDD8]/60 group-hover:text-[#D1B894] transition-colors duration-300">
-                <FacebookIcon />
-              </span>
-              <span className="font-cinzel text-[0.95rem] md:text-[1.05rem] tracking-[0.15em] text-[#F5EDD8] group-hover:text-white transition-colors duration-300">
-                FACEBOOK
-              </span>
+        {/* TELÉFONO */}
+        {activeLocal.phone && (
+          <div className="flex gap-3 items-center">
+            <Phone size={16} className="shrink-0" style={{ color: "#E8A557" }} />
+            <p className="text-[1.05rem]" style={{ color: "rgba(245,237,216,0.75)" }}>
+              {activeLocal.phone}
+            </p>
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-3" style={{ borderTop: "1px solid rgba(232,165,87,0.15)" }}>
+          <div className="flex gap-4">
+            <a href={activeLocal.facebook} target="_blank" rel="noopener noreferrer"
+               className="transition-colors duration-300"
+               style={{ color: "rgba(245,237,216,0.5)" }}
+               onMouseEnter={e => (e.currentTarget.style.color = "#E8A557")}
+               onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,237,216,0.5)")}>
+              <FacebookIcon />
             </a>
-
-            <a
-              href={activeLocal.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-start bg-transparent p-0 border-none cursor-pointer group outline-none"
-            >
-              <span className="mb-1 text-[#F5EDD8]/60 group-hover:text-[#D1B894] transition-colors duration-300">
-                <InstagramIcon />
-              </span>
-              <span className="font-cinzel text-[0.95rem] md:text-[1.05rem] tracking-[0.15em] text-[#F5EDD8] group-hover:text-white transition-colors duration-300">
-                INSTAGRAM
-              </span>
+            <a href={activeLocal.instagram} target="_blank" rel="noopener noreferrer"
+               className="transition-colors duration-300"
+               style={{ color: "rgba(245,237,216,0.5)" }}
+               onMouseEnter={e => (e.currentTarget.style.color = "#E8A557")}
+               onMouseLeave={e => (e.currentTarget.style.color = "rgba(245,237,216,0.5)")}>
+              <InstagramIcon />
             </a>
           </div>
-        </article>
-
-        <div className="map-container">
-          <div className="mapa-zone-badge">{activeLocal.zoneLabel}</div>
-          <iframe
-            title={activeLocal.mapTitle}
-            src={activeLocal.mapSrc}
-            width="600"
-            height="450"
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
+          {activeLocal.parking && (
+            <span className="parking-shimmer text-[1rem] uppercase tracking-widest text-right"
+                  style={{ fontFamily: "var(--font-cinzel)", maxWidth: "160px", lineHeight: 1.3 }}>
+              Incluimos parqueadero
+            </span>
+          )}
         </div>
       </div>
+
     </section>
   )
 }

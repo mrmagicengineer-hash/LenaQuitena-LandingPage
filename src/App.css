@@ -93,65 +93,77 @@
 
 @theme {
 
-  /* Colores principales (ajustados para mejor armonía con el logo) */
+  /* ── Paleta Leña Quiteña ── */
 
-  --color-vino: #7C0F19;
+  --color-vino: #6B1F1F;
 
   --color-vino-dark: #4F0A11;
 
-  --color-cafe: #1F0C09;
+  --color-chocolate: #3D1F1F;
+
+  --color-cafe: #1C0A00;
 
   --color-cafe-light: #2E1814;
+
+  --color-ladrillo: #A23939;
+
+  --color-marron: #5C3A2E;
 
   --color-naranja: #E85D1A;
 
   --color-amarillo: #F9B23C;
 
-  --color-dorado: #D4A13B;
+  --color-dorado: #E8A557;
 
-  --color-crema: #F8F0E0;
+  --color-dorado-claro: #F4D799;
 
-  --color-crema-dark: #EDE4D0;
+  --color-crema: #F5F0E8;
+
+  --color-crema-dark: #EDE5D8;
+
+  --color-gris-calido: #8B7968;
 
 
 
-  /* shadcn/ui theme tokens (actualizados) */
+  /* shadcn/ui theme tokens */
 
-  --color-background: #F8F0E0;
+  --color-background: #F5F0E8;
 
-  --color-foreground: #1F0C09;
+  --color-foreground: #1C0A00;
 
-  --color-primary: #7C0F19;
+  --color-primary: #6B1F1F;
 
-  --color-primary-foreground: #ffffff;
+  --color-primary-foreground: #F5F0E8;
 
-  --color-secondary: #EDE4D0;
+  --color-secondary: #EDE5D8;
 
-  --color-secondary-foreground: #1F0C09;
+  --color-secondary-foreground: #1C0A00;
 
-  --color-muted: #EDE4D0;
+  --color-muted: #EDE5D8;
 
-  --color-muted-foreground: #6b5e52;
+  --color-muted-foreground: #8B7968;
 
-  --color-accent: #E85D1A;
+  --color-accent: #E8A557;
 
-  --color-accent-foreground: #ffffff;
+  --color-accent-foreground: #1C0A00;
 
   --color-destructive: #9F1A1A;
 
-  --color-border: #D9C8A8;
+  --color-border: #E8A557;
 
-  --color-input: #D9C8A8;
+  --color-input: #EDE5D8;
 
-  --color-ring: #7C0F19;
+  --color-ring: #6B1F1F;
 
-  --color-popover: #F8F0E0;
+  --color-popover: #F5F0E8;
 
-  --color-popover-foreground: #1F0C09;
+  --color-popover-foreground: #1C0A00;
 
 
 
-  /* Tipografías Recomendadas */
+  /* Tipografías */
+
+  --font-sans: "Nunito Variable", sans-serif;
 
   --font-cinzel: "Cinzel", serif;
 
@@ -160,7 +172,6 @@
   --font-cormorant: "Cormorant Garamond", serif;
 
   --font-great-vibes: "Great Vibes", cursive;
-  /* Para detalles elegantes tipo logo */
 
 
 
@@ -216,7 +227,15 @@
 
 @utility font-body {
 
-  font-family: var(--font-cormorant);
+  font-family: var(--font-sans);
+
+}
+
+
+
+@utility font-nunito {
+
+  font-family: var(--font-sans);
 
 }
 
@@ -2361,17 +2380,17 @@ html {
 
 .historia-content-panel h3 {
 
-  font-family: var(--font-cinzel);
+  font-family: var(--font-playfair);
 
-  font-size: clamp(1.75rem, 2.9vw, 2.25rem);
+  font-size: clamp(1.75rem, 2.9vw, 2.5rem);
 
   font-weight: 700;
 
-  color: rgba(245, 237, 216, 0.92);
+  color: rgba(245, 240, 232, 0.92);
 
   margin-bottom: 1.5rem;
 
-  line-height: 1.3;
+  line-height: 1.25;
 
 }
 
@@ -2385,7 +2404,7 @@ html {
 
   font-weight: 400;
 
-  color: rgba(186, 117, 23, 0.85);
+  color: rgba(232, 165, 87, 0.9);
 
 }
 
@@ -2393,13 +2412,13 @@ html {
 
 .historia-content-panel p {
 
-  font-family: var(--font-cormorant);
+  font-family: var(--font-sans);
 
-  font-size: 1.26rem;
+  font-size: 1rem;
 
-  line-height: 1.8;
+  line-height: 1.7;
 
-  color: rgba(245, 237, 216, 0.72);
+  color: rgba(245, 240, 232, 0.72);
 
   margin-bottom: 1rem;
 
@@ -2551,7 +2570,7 @@ html {
 
   position: relative;
 
-  padding: 8rem 2rem;
+  padding: 4rem 2rem;
 
   background: var(--color-cafe);
 
@@ -3088,7 +3107,7 @@ html {
 
   text-align: center;
 
-  margin-top: 3rem;
+  margin-top: 1.5rem;
 
   font-family: var(--font-cormorant);
 
@@ -5722,121 +5741,43 @@ html {
 
 
 
+/* ═══════════════ LOCALES SECTION ═══════════════ */
+
 .locales-section {
-
-  padding: 8rem 2rem;
-
-  background: var(--color-cafe);
 
   position: relative;
 
+  height: 100vh;
+
+  min-height: 650px;
+
   overflow: hidden;
 
-}
+  padding: 0;
 
-
-
-.locales-label {
-
-  color: var(--color-naranja);
+  background: #1C0A00;
 
 }
 
-
-
-.locales-title {
-
-  color: var(--color-crema);
-
-}
-
-
-
-.locales-title em {
-
-  color: var(--color-naranja);
-
-}
-
-
-
-.locales-map-layout {
-
-  display: grid;
-
-  grid-template-columns: 1fr;
-
-  grid-template-rows: auto auto auto;
-
-  gap: 2rem;
-
-  max-width: 1200px;
-
-  margin-inline: auto;
-
-}
-
-
-
-@media (min-width: 1024px) {
-
-  .locales-map-layout {
-
-    grid-template-columns: 380px minmax(0, 1fr);
-
-    grid-template-rows: auto 1fr;
-
-    gap: 1.5rem 2rem;
-
-    align-items: start;
-
-  }
-
-}
-
-
-
-/* ── Map container ── */
+/* ── Full-screen map ── */
 
 .map-container {
 
-  position: relative;
+  position: absolute;
+
+  inset: 0;
 
   width: 100%;
 
-  height: 450px;
+  height: 100%;
 
-  border-radius: 0;
+  border: none;
+
+  box-shadow: none;
 
   overflow: hidden;
 
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-
-  border: 1px solid rgba(201, 150, 63, 0.2);
-
-  grid-row: 3 / 4;
-
 }
-
-
-
-@media (min-width: 1024px) {
-
-  .map-container {
-
-    grid-column: 2 / 3;
-
-    grid-row: 1 / 3;
-
-    min-height: 650px;
-
-    height: 100%;
-
-  }
-
-}
-
-
 
 .map-container iframe {
 
@@ -5846,284 +5787,241 @@ html {
 
   border: 0;
 
-  filter: grayscale(0.4) sepia(0.3) brightness(0.9) contrast(0.95);
-  /* Slightly more stylized */
+  filter: none;
 
 }
 
+/* ── Floating info card ── */
 
+.locales-floating-card {
 
-/* ── Info Card (now separate from selectors) ── */
+  position: absolute;
 
-.local-card--on-map {
+  left: 2.5rem;
 
-  background: rgba(37, 15, 13, 0.85);
+  top: 50%;
 
-  backdrop-filter: blur(18px);
+  transform: translateY(-50%);
 
-  -webkit-backdrop-filter: blur(18px);
+  width: 360px;
 
-  border: 1px solid rgba(201, 150, 63, 0.25);
+  max-width: calc(100vw - 3rem);
+
+  background: #701A1D;
+
+  backdrop-filter: none;
+
+  -webkit-backdrop-filter: none;
+
+  border: 1px solid rgba(232, 165, 87, 0.38);
 
   border-radius: 0;
 
-  padding: 2.5rem;
+  padding: 2rem;
 
-  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
 
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 1.75rem;
-
-  grid-row: 2 / 3;
-
-  box-sizing: border-box;
-
-  min-height: 440px;
-
-}
-
-
-
-@media (min-width: 1024px) {
-
-  .local-card--on-map {
-
-    grid-column: 1 / 2;
-
-    grid-row: 2 / 3;
-
-    margin: 0;
-
-    max-width: 100%;
-
-    min-height: 460px;
-
-  }
-
-}
-
-
-
-/* ── Map Selectors (now separate from card) ── */
-
-.map-selectors {
+  z-index: 10;
 
   display: flex;
 
   flex-direction: column;
 
-  gap: 1rem;
-
-  grid-row: 1 / 2;
+  gap: 1.2rem;
 
 }
 
+.locales-card-title {
 
+  font-family: var(--font-playfair);
 
-.map-selectors h3 {
+  font-size: 1.6rem;
 
-  @apply font-cinzel-semibold;
+  font-weight: 700;
 
-  color: var(--color-crema);
+  color: #F5EDD8;
 
-  font-size: 1.1rem;
+  letter-spacing: 0.03em;
 
-  letter-spacing: 0.1em;
+  line-height: 1.1;
+
+  margin: 0;
+
+}
+
+/* ── CTA button ── */
+
+.locales-cta-btn {
+
+  display: block;
+
+  width: 100%;
+
+  padding: 0.85rem 1rem;
+
+  background: #701A1D;
+
+  color: #F5EDD8;
+
+  font-family: var(--font-cinzel);
+
+  font-size: 0.75rem;
+
+  letter-spacing: 0.28em;
 
   text-transform: uppercase;
 
-  margin-bottom: 0.5rem;
+  text-align: center;
 
-  padding-left: 0.5rem;
+  text-decoration: none;
 
-}
+  border: 1px solid rgba(232, 165, 87, 0.35);
 
+  border-radius: 4px;
 
+  cursor: pointer;
 
-@media (min-width: 1024px) {
-
-  .map-selectors {
-
-    grid-column: 1 / 2;
-
-    grid-row: 1 / 2;
-
-    margin: 0;
-
-    max-width: 100%;
-
-  }
+  transition: background 0.25s ease, border-color 0.25s ease;
 
 }
 
+.locales-cta-btn:hover {
 
+  background: #8B2124;
+
+  border-color: rgba(232, 165, 87, 0.65);
+
+}
+
+/* ── Parking badge bottom-right ── */
+
+.locales-parking-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.45rem;
+
+  padding: 0.85rem 1.6rem;
+
+  background: #E8A557;
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  border: none;
+
+  border-radius: 8px;
+
+  font-family: var(--font-cinzel);
+
+  font-size: 0.85rem;
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+
+  color: #1C0A00;
+
+  font-weight: 700;
+
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+
+}
+
+/* ── Selector buttons ── */
 
 .map-selector-btn {
 
   @apply font-cinzel;
 
-  width: 100%;
+  padding: 0.35rem 0;
 
-  padding: 1rem 1.5rem;
+  font-size: 0.78rem;
 
-  font-size: 1rem;
-
-  letter-spacing: 0.15em;
+  letter-spacing: 0.18em;
 
   text-transform: uppercase;
 
-  text-align: left;
+  color: rgba(245, 237, 216, 0.42);
 
-  color: var(--color-crema-dark);
+  background: transparent;
 
-  background: rgba(21, 12, 5, 0.6);
+  border: none;
 
-  border: 1px solid rgba(201, 150, 63, 0.2);
-
-  border-radius: 0;
+  border-bottom: 2px solid transparent;
 
   cursor: pointer;
 
-  transition: all 0.3s ease;
-
-  position: relative;
+  transition: color 0.25s ease, border-color 0.25s ease;
 
 }
-
-
 
 .map-selector-btn:hover {
 
-  background: rgba(37, 15, 13, 0.8);
-
-  border-color: rgba(201, 150, 63, 0.4);
-
-  color: var(--color-crema);
-
-  transform: translateY(-2px);
+  color: rgba(245, 237, 216, 0.75);
 
 }
-
-
 
 .map-selector-btn--active {
 
-  background: var(--color-vino);
+  border-bottom: 2px solid #E8A557;
 
-  border-color: rgba(201, 150, 63, 0.5);
+  color: #F5EDD8;
 
-  color: white;
-
-  font-weight: 700;
-
-  box-shadow: 0 0 25px rgba(139, 18, 27, 0.7);
-
-  transform: translateY(-2px);
+  font-weight: 600;
 
 }
 
+/* ── Shimmer parqueadero ── */
 
-
-/* Re-using and enhancing styles */
-
-.local-card--on-map h4 {
-
-  @apply font-cinzel-bold;
-
-  font-size: 1.6rem;
-
-  color: var(--color-naranja);
-
-  letter-spacing: 0.1em;
-
-  text-transform: uppercase;
-
+@keyframes parking-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
 }
 
-
-
-.local-card--on-map .local-label {
-
-  color: var(--color-dorado);
-
+.parking-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(245,237,216,0.5) 0%,
+    #E8A557 30%,
+    #fff5e0 50%,
+    #E8A557 70%,
+    rgba(245,237,216,0.5) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: parking-shimmer 5s linear infinite;
 }
 
+/* ── Mobile ── */
 
+@media (max-width: 767px) {
 
-.local-card--on-map p,
+  .locales-floating-card {
 
-.local-card--on-map .phone {
+    left: 1rem;
 
-  color: rgba(245, 237, 216, 0.85);
+    right: 1rem;
 
-}
+    width: auto;
 
+    max-width: 100%;
 
+    top: auto;
 
-.local-card--on-map .horarios-table th,
+    bottom: 1rem;
 
-.local-card--on-map .horarios-table td {
+    transform: none;
 
-  color: rgba(245, 237, 216, 0.85);
+    max-height: 55vh;
 
-  border-color: rgba(245, 237, 216, 0.15);
+    overflow-y: auto;
 
-}
-
-
-
-.local-card--on-map .red-btn {
-
-  background: rgba(245, 237, 216, 0.08);
-
-  color: var(--color-crema-dark);
-
-}
-
-
-
-.local-card--on-map .red-btn:hover {
-
-  background: var(--color-vino-dark);
-
-  color: white;
-
-}
-
-
-
-.mapa-zone-badge {
-
-  position: absolute;
-
-  top: 1.5rem;
-
-  right: 1.5rem;
-  /* Positioned to the right */
-
-  z-index: 1;
-
-  @apply font-cinzel;
-
-  font-size: 0.75rem;
-
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
-
-  padding: 0.6rem 1.2rem;
-
-  background: rgba(37, 15, 13, 0.85);
-
-  backdrop-filter: blur(10px);
-
-  color: var(--color-crema);
-
-  border-radius: 6px;
-
-  border: 1px solid rgba(201, 150, 63, 0.25);
+  }
 
 }

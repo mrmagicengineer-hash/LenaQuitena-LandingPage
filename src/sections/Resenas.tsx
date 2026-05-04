@@ -1,119 +1,136 @@
+import { useRef }      from "react"
 import { useLanguage } from "@/context/LanguageContext"
 import { useReveal }   from "@/hooks/useReveal"
+import { motion, useScroll, useTransform } from "motion/react"
 
 interface Testimonio {
-  text: string
-  autor: string
-  local: string
+  text:   string
+  autor:  string
+  local:  string
+  source: string
 }
+
+
+
+const StarIcon = ({ filled = true }: { filled?: boolean }) => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+  </svg>
+)
 
 export default function Resenas() {
   const { t }           = useLanguage()
   const { ref, inView } = useReveal<HTMLElement>({ threshold: 0.08 })
+  const innerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: innerRef, offset: ["start end", "end start"] })
+  const headerY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
+  const cardsY  = useTransform(scrollYProgress, [0, 1], ["-3%", "3%"])
 
   const TESTIMONIOS: Testimonio[] = [
-    { text: t("resenas.item1.text"), autor: t("resenas.item1.author"), local: t("resenas.item1.place") },
-    { text: t("resenas.item2.text"), autor: t("resenas.item2.author"), local: t("resenas.item2.place") },
-    { text: t("resenas.item3.text"), autor: t("resenas.item3.author"), local: t("resenas.item3.place") },
+    { text: t("resenas.item1.text"), autor: t("resenas.item1.author"), local: t("resenas.item1.place"), source: "Google" },
+    { text: t("resenas.item2.text"), autor: t("resenas.item2.author"), local: t("resenas.item2.place"), source: "Google" },
+    { text: t("resenas.item3.text"), autor: t("resenas.item3.author"), local: t("resenas.item3.place"), source: "Google" },
   ]
 
   return (
     <section
       ref={ref}
       id="resenas"
-      className={`py-28 md:py-36 reveal ${inView ? "reveal--visible" : ""}`}
-      style={{ background: "var(--color-cafe)" }}
+      className={`min-h-screen pt-16 pb-24 reveal ${inView ? "reveal--visible" : ""}`}
+      style={{ background: "transparent" }}
       aria-label={t("resenas.aria.carousel")}
     >
-      <div className="max-w-6xl mx-auto px-6 lg:px-12">
+      <div ref={innerRef} className="w-full px-6 lg:px-16 xl:px-24">
 
         {/* HEADER */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-20">
+        <motion.div
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-20"
+          style={{ y: headerY }}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div>
             <div className="flex items-center gap-4 mb-5">
-              <span className="block w-8 h-px" style={{ backgroundColor: "rgba(212,161,59,0.5)" }} />
-              <span className="text-xs uppercase tracking-[0.6em] font-bold" style={{ color: "var(--color-dorado)" }}>
+              <span className="block w-8 h-px" style={{ backgroundColor: "rgba(186,117,23,0.5)" }} />
+              <span className="text-xs uppercase tracking-[0.6em] font-bold" style={{ color: "#BA7517" }}>
                 {t("resenas.badge")}
               </span>
             </div>
             <h2
-              className="text-4xl md:text-6xl font-serif italic tracking-tight leading-tight"
-              style={{ color: "var(--color-crema)" }}
+              className="text-4xl md:text-5xl font-playfair font-bold tracking-tight leading-tight"
+              style={{ color: "#3D1F1F" }}
             >
               {t("resenas.title")}
             </h2>
           </div>
 
-          {/* Rating summary */}
-          <div className="flex items-center gap-5 shrink-0 pb-1">
-            <div className="text-right">
-              <p className="text-5xl font-serif font-bold leading-none" style={{ color: "var(--color-dorado)" }}>5.0</p>
-              <div className="flex gap-0.5 mt-2 justify-end">
-                {Array.from({ length: 5 }).map((_, s) => (
-                  <svg key={s} width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style={{ color: "var(--color-dorado)" }}>
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                ))}
+          {/* Rating widget — estilo moodboard */}
+          <motion.div
+            className="flex items-stretch gap-0 shrink-0 shadow-lg"
+            style={{ border: "1px solid rgba(186,117,23,0.4)", boxShadow: "0 4px 20px rgba(0,0,0,0.10)" }}
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="flex flex-col items-center justify-center px-8 py-5" style={{ backgroundColor: "rgba(61,31,31,0.05)" }}>
+              <p className="text-5xl font-cinzel font-cinzel-bold leading-none" style={{ color: "#BA7517" }}>4.8</p>
+              <span className="text-xs mt-1" style={{ color: "rgba(61,31,31,0.5)", fontSize: "11px" }}>/5</span>
+            </div>
+            <div className="w-px" style={{ backgroundColor: "rgba(186,117,23,0.25)" }} />
+            <div className="flex flex-col justify-center px-8 py-5" style={{ backgroundColor: "rgba(61,31,31,0.05)" }}>
+              <p className="font-semibold text-sm tracking-wide" style={{ color: "#3D1F1F" }}>Excelente</p>
+              <div className="flex gap-0.5 mt-1.5">
+                {Array.from({ length: 5 }).map((_, s) => <StarIcon key={s} />)}
               </div>
-              <p className="text-[11px] mt-1.5 uppercase tracking-widest" style={{ color: "rgba(248,240,224,0.35)" }}>
-                Google Reviews
+              <p className="text-[11px] mt-1.5 uppercase tracking-widest" style={{ color: "rgba(61,31,31,0.5)" }}>
+                Basado en 200+ reseñas
               </p>
             </div>
-            <div className="w-px h-16" style={{ backgroundColor: "rgba(212,161,59,0.2)" }} />
-            <div>
-              <p className="text-4xl font-serif font-bold leading-none" style={{ color: "rgba(248,240,224,0.25)" }}>03</p>
-              <p className="text-[11px] mt-1.5 uppercase tracking-widest" style={{ color: "rgba(248,240,224,0.25)" }}>Reseñas</p>
-            </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* DIVISOR */}
-        <div className="w-full h-px mb-16" style={{ backgroundColor: "rgba(212,161,59,0.12)" }} />
+        <div className="w-full h-px mb-16" style={{ backgroundColor: "rgba(61,31,31,0.15)" }} />
 
         {/* CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6">
+        <motion.div style={{ y: cardsY }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {TESTIMONIOS.map((item, i) => (
-            <article
+            <motion.article
               key={i}
-              className="relative flex flex-col justify-between p-8 transition-all duration-500 cursor-default group"
+              className="relative flex flex-col justify-between p-12 cursor-default group min-h-105"
               style={{
-                backgroundColor: "#1e0d0a",
-                borderTop: "2px solid var(--color-vino)",
+                backgroundColor: "rgba(61,31,31,0.04)",
+                border: "1px solid rgba(186,117,23,0.3)",
+                boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
               }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderTopColor = "var(--color-dorado)"
-                e.currentTarget.style.backgroundColor = "#261008"
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderTopColor = "var(--color-vino)"
-                e.currentTarget.style.backgroundColor = "#1e0d0a"
-              }}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-5%" }}
+              transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ y: -4, boxShadow: "0 12px 40px rgba(0,0,0,0.12)", backgroundColor: "rgba(61,31,31,0.08)" }}
             >
-              {/* Número fondo */}
-              <span
-                className="absolute top-6 right-7 text-6xl font-serif font-bold leading-none select-none pointer-events-none"
-                style={{ color: "rgba(248,240,224,0.04)" }}
-              >
-                0{i + 1}
-              </span>
+              {/* Source badge — top right, estilo moodboard */}
+              <div className="absolute top-6 right-6 flex items-center gap-1.5">
+                
+                <span className="text-[11px] uppercase tracking-[0.2em]" style={{ color: "rgba(61,31,31,0.45)" }}>
+                  {item.source}
+                </span>
+              </div>
 
-              {/* Comilla */}
-              <span
-                className="block text-5xl leading-none mb-6 select-none transition-colors duration-300"
-                style={{ color: "var(--color-vino)", fontFamily: "Georgia, serif" }}
-                aria-hidden="true"
-              >
-                &ldquo;
-              </span>
+              {/* Stars */}
+              <div className="flex gap-0.5 mb-6">
+                {Array.from({ length: 5 }).map((_, s) => <StarIcon key={s} />)}
+              </div>
 
               {/* Texto reseña */}
               <p
-                className="flex-1 text-[1.1rem] leading-[1.85] mb-10"
+                className="flex-1 text-2xl md:text-3xl leading-relaxed mb-10"
                 style={{
-                  fontFamily: "'Cormorant Garamond', Georgia, serif",
-                  fontStyle: "italic",
-                  color: "var(--color-crema)",
-                  opacity: 0.82,
+                  color: "#5C3A2E",
+                  opacity: 0.88,
                 }}
               >
                 {item.text}
@@ -122,33 +139,31 @@ export default function Resenas() {
               {/* Footer */}
               <div
                 className="flex items-center justify-between pt-6"
-                style={{ borderTop: "1px solid rgba(212,161,59,0.12)" }}
+                style={{ borderTop: "1px solid rgba(61,31,31,0.12)" }}
               >
                 <div>
-                  <p className="text-sm font-semibold tracking-wide" style={{ color: "var(--color-crema)" }}>
+                  <p className="text-lg font-semibold tracking-wide" style={{ color: "#3D1F1F" }}>
                     {item.autor}
                   </p>
                   <p
-                    className="text-[10px] mt-1.5 uppercase tracking-[0.35em]"
-                    style={{ color: "var(--color-dorado)", opacity: 0.6 }}
+                    className="text-sm mt-1.5 uppercase tracking-[0.35em]"
+                    style={{ color: "#BA7517" }}
                   >
                     {item.local}
                   </p>
                 </div>
 
-                {/* Stars mini */}
-                <div className="flex gap-0.5">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <svg key={s} width="10" height="10" viewBox="0 0 24 24" fill="currentColor"
-                      style={{ color: "var(--color-dorado)" }}>
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                  ))}
-                </div>
+                {/* Número decorativo */}
+                <span
+                  className="text-5xl font-sans font-bold leading-none select-none"
+                  style={{ color: "rgba(61,31,31,0.06)" }}
+                >
+                  0{i + 1}
+                </span>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
 
       </div>
     </section>
