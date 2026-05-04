@@ -9,7 +9,6 @@ RUN npm ci
 
 COPY . .
 RUN npx prisma generate && npm run build:server
-RUN npx prisma db push
 
 EXPOSE 3001
-CMD ["npm", "run", "start:server"]
+CMD ["sh", "-c", "npx prisma db push && npm run start:server"]
