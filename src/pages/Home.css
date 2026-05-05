@@ -10,7 +10,7 @@ body::before {
   content: "";
   position: fixed;
   inset: -200%;
-  background-image: url("/assets/images/noise.png");
+  background-image: none;
   animation: noise-pan 8s steps(10) infinite;
   will-change: transform;
   z-index: 1000;

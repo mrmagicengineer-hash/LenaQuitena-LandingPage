@@ -53,11 +53,12 @@ const GALLERY_TITLES: Record<RestaurantKey, string> = {
 
 function ParallaxMasonryGrid({ items, onOpen }: { items: GalleryItem[]; onOpen: (i: number) => void }) {
   const sectionRef = useRef<HTMLDivElement>(null)
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] })
 
-  const col1Y = useTransform(scrollYProgress, [0, 1], ["-70px", "70px"])
-  const col2Y = useTransform(scrollYProgress, [0, 1], ["50px", "-50px"])
-  const col3Y = useTransform(scrollYProgress, [0, 1], ["-90px", "90px"])
+  const col1Y = useTransform(scrollYProgress, [0, 1], isMobile ? ["0px", "0px"] : ["-70px", "70px"])
+  const col2Y = useTransform(scrollYProgress, [0, 1], isMobile ? ["0px", "0px"] : ["50px", "-50px"])
+  const col3Y = useTransform(scrollYProgress, [0, 1], isMobile ? ["0px", "0px"] : ["-90px", "90px"])
 
   const colYValues = [col1Y, col2Y, col3Y]
 
@@ -67,7 +68,7 @@ function ParallaxMasonryGrid({ items, onOpen }: { items: GalleryItem[]; onOpen: 
   const colIndexOffset = [0, 1, 2]
 
   return (
-    <div ref={sectionRef} className="grid grid-cols-3 gap-3 px-4 md:px-10 py-8">
+    <div ref={sectionRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 px-4 md:px-10 py-8">
       {cols.map((col, colIdx) => (
         <motion.div
           key={colIdx}

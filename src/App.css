@@ -6025,3 +6025,68 @@ html {
   }
 
 }
+
+/* ════════════════════════════════════
+   MOBILE GLOBAL — max-width: 480px
+   ════════════════════════════════════ */
+
+@media (max-width: 480px) {
+
+  .hero-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .historia-content-panel {
+    padding: 1.5rem 1rem;
+  }
+
+  .historia-content-panel h3 {
+    font-size: 1.8rem;
+  }
+
+  .menu-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .menu-card {
+    padding: 1rem;
+  }
+
+  .locales-section {
+    height: auto;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .map-container {
+    position: relative;
+    height: 45vh;
+  }
+
+  .locales-floating-card {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .testimonios-section::before {
+    width: 200px !important;
+    height: 200px !important;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+}

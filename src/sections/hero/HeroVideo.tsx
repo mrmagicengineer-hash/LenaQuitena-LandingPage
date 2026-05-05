@@ -9,7 +9,7 @@ const HeroVideo = () => {
       muted
       playsInline
       aria-hidden="true"
-      poster="/videos/hero-poster.jpg"  /* imagen estática mientras carga el video */
+      poster=""
     >
       <source src={heroVideo} type="video/mp4" />
     </video>

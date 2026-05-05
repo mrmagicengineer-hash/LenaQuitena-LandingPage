@@ -24,14 +24,12 @@ const allowedOrigins = new Set([
   'http://127.0.0.1:5173',
 ].filter((v): v is string => Boolean(v)));
 
+const vercelPattern = /^https:\/\/lena-quitena-landing-page[^.]*\.vercel\.app$/;
+
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow non-browser requests and same-origin requests without Origin header.
-    if (!origin) {
-      callback(null, true);
-      return;
-    }
-    if (allowedOrigins.has(origin)) {
+    if (!origin) { callback(null, true); return; }
+    if (allowedOrigins.has(origin) || vercelPattern.test(origin)) {
       callback(null, true);
       return;
     }
