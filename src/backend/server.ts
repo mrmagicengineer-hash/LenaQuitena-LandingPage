@@ -147,7 +147,7 @@ app.post('/api/menu', async (req, res) => {
     console.log(`📊 Total para ${restaurant}: ${total}`);
 
     res.json({
-      message: 'Menú actualizado',
+      message: 'Menú actualizado-LenaQuitena',
       restaurant,
       totalSaved: total
     });
