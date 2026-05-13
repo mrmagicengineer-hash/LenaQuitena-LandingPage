@@ -162,7 +162,7 @@ export default function Menu() {
 
           {/* PANEL PRINCIPAL */}
           <div
-            className="border-t px-10 pt-16 pb-32 md:px-20 md:pt-20 md:pb-40"
+            className="border-t px-4 pt-10 pb-20 md:px-20 md:pt-20 md:pb-40"
             style={{
               borderColor: "rgba(232,165,87,0.3)",
               background: "linear-gradient(180deg, #F5F0E8 0%, #EDE5D8 100%)",
@@ -231,7 +231,7 @@ export default function Menu() {
                     {/* IMAGEN */}
                     {item.image && (
                       <div
-                        className="relative w-full sm:w-48 h-48 md:w-56 md:h-56 shrink-0 overflow-hidden transition-colors duration-300"
+                        className="relative w-full sm:w-40 h-40 lg:w-44 lg:h-44 xl:w-56 xl:h-56 shrink-0 overflow-hidden transition-colors duration-300"
                         style={{
                           backgroundColor: "#EDE5D8",
                           border: "1px solid rgba(232,165,87,0.3)",
@@ -260,16 +260,16 @@ export default function Menu() {
 
                       <div className="flex justify-between items-baseline mb-5">
                         <h4
-                          className="text-2xl md:text-3xl font-playfair font-semibold leading-tight shrink-0 transition-colors duration-200"
+                          className="text-xl md:text-2xl font-playfair font-semibold leading-tight transition-colors duration-200"
                           style={{ color: "#3D1F1F" }}
                           onMouseEnter={e => (e.currentTarget.style.color = "#6B1F1F")}
                           onMouseLeave={e => (e.currentTarget.style.color = "#3D1F1F")}
                         >
                           {item.name}
                         </h4>
-                        <span className="flex-1 mx-4 border-b-2 border-dotted mb-1" style={{ borderColor: "rgba(107,31,31,0.15)" }} />
+                        <span className="flex-1 mx-3 border-b-2 border-dotted mb-1 min-w-2 shrink" style={{ borderColor: "rgba(107,31,31,0.15)" }} />
                         <div className="flex flex-col items-end shrink-0">
-                          <span className="font-cinzel font-cinzel-bold text-2xl md:text-3xl tabular-nums" style={{ color: "#E8A557" }}>
+                          <span className="font-cinzel font-cinzel-bold text-xl md:text-2xl tabular-nums" style={{ color: "#E8A557" }}>
                             {formatPrice(item.price)}
                           </span>
                           <span className="text-[10px] uppercase tracking-widest font-light mt-0.5" style={{ color: "#8B7968" }}>

@@ -32,6 +32,13 @@ const Navbar = () => {
   const { t } = useLanguage()
   const { items: cartItems, totalItems, removeItem, updateQuantity, clearCart } = useCart()
 
+  /* ── Abrir modal de reservas desde ChatBot ── */
+  useEffect(() => {
+    const handler = () => setIsReservationModalOpen(true)
+    window.addEventListener('open-reservation-modal', handler)
+    return () => window.removeEventListener('open-reservation-modal', handler)
+  }, [])
+
   /* ── Detectar scroll: shrink + hide/show ── */
   useEffect(() => {
     let lastY = window.scrollY

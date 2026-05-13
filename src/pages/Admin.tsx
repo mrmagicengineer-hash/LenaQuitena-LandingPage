@@ -169,7 +169,7 @@ const Admin = () => {
     return trimmed.startsWith('$') ? trimmed : `$${trimmed}`;
   };
 
-  const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePasswordSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password === getSavedPassword()) {
       setIsAuthenticated(true);
@@ -337,7 +337,7 @@ const Admin = () => {
     setStatusMessage('Sesión cerrada.');
   };
 
-  const handleChangePassword = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChangePassword = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (currentPasswordInput !== getSavedPassword()) { setStatusMessage('La contraseña actual no coincide.'); return; }
     if (newPasswordInput.length < 4) { setStatusMessage('La nueva contraseña debe tener al menos 4 caracteres.'); return; }
@@ -453,7 +453,7 @@ const Admin = () => {
             }`}
           >
             {/* Accordion header */}
-            <div className="flex items-center gap-2 px-4 py-3 bg-slate-50/60 border-b border-slate-100">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-100">
               <span className="shrink-0 cursor-grab active:cursor-grabbing text-slate-300 hover:text-slate-400 transition-colors">
                 <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                   <circle cx="7" cy="4" r="1.5"/><circle cx="13" cy="4" r="1.5"/>

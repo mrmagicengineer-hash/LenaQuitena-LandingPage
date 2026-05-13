@@ -118,8 +118,9 @@ export default function Locales() {
         <iframe
           title={activeLocal.mapTitle}
           src={activeLocal.mapSrc}
-          width="600"
-          height="450"
+          width="100%"
+          height="100%"
+          style={{ width: "100%", height: "100%", border: 0 }}
           allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"

@@ -1,39 +1,47 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Galeria.tsx
+//
+// Estructura:
+//   <section#galeria>
+//     ├── Header (título animado con framer-motion)
+//     ├── Tabs restaurante  → "San Marcos" | "La Ronda"
+//     ├── Tabs categoría    → "Platos" | "Eventos" | "Local"
+//     │     San Marcos: solo Platos + Local (Eventos pendiente de fotógrafo)
+//     │     La Ronda:   Platos + Eventos + Local
+//     ├── MasonryGrid  → 3 columnas, imágenes desde public/images/
+//     └── Lightbox     → modal fullscreen con navegación
+//
+// Imágenes:
+//   public/images/san_marcos/platos/   → C1–C4
+//   public/images/san_marcos/local/    → C70,C73,C74,C76,C77,C81,C82,C84,C85,C86,C87,C89
+//   public/images/la_ronda/platos/     → C36–C38,C51–C53
+//   public/images/la_ronda/Eventos/    → C31,C33,C39–C41,C47,C65
+//   public/images/la_ronda/local/      → C26,C28–C30,C43–C45,C48,C57,C59,C66
+//
+// Animaciones GSAP:
+//   1. Reveal inicial  → fade-in + y:50 en cascada al entrar al viewport (once)
+//   2. Scroll parallax → columnas con fromTo scrub (solo desktop ≥ 768px)
+//   3. Transición de tab/categoría → fade-out del grid → cambio de estado → fade-in
+// ─────────────────────────────────────────────────────────────────────────────
+
 import { useEffect, useState, useCallback, useRef } from "react"
 import { useRestaurant } from "@/context/RestaurantContext"
-import { motion, useScroll, useTransform } from "motion/react"
+import { motion } from "motion/react"
 import { X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react"
+import gsap from "gsap"
 
-import C3  from "@/assets/images/C3.jpg.jpeg"
-import C7  from "@/assets/images/C7.jpg.jpeg"
-import C11 from "@/assets/images/C11.jpg.jpeg"
-import C15 from "@/assets/images/C15.jpg.jpeg"
-import C18 from "@/assets/images/C18.jpg.jpeg"
-import C21 from "@/assets/images/C21.jpg.jpeg"
-import C24 from "@/assets/images/C24.jpg.jpeg"
-import C2  from "@/assets/images/C2.jpg.jpeg"
-import C9  from "@/assets/images/C9.jpg.jpeg"
-import C13 from "@/assets/images/C13.jpg.jpeg"
+// ── Tipos ──────────────────────────────────────────────────────────────────
 
 type RestaurantKey = "san-marcos" | "la-ronda"
+type CategoryKey   = "platos" | "eventos" | "local"
 
 interface GalleryItem {
-  image:   string
+  image:   string // ruta pública, ej. /images/la_ronda/platos/C36.jpg.jpeg
   label:   string
   caption: string
 }
 
-const FOOD_ITEMS: GalleryItem[] = [
-  { image: C3,  label: "Plato estrella",  caption: "Sabor a leña" },
-  { image: C7,  label: "Del fogón",       caption: "Tradición viva" },
-  { image: C11, label: "Nuestros cortes", caption: "Fuego y sazón" },
-  { image: C15, label: "Alma quiteña",    caption: "Receta ancestral" },
-  { image: C18, label: "A la brasa",      caption: "Carne perfecta" },
-  { image: C21, label: "Detalle",         caption: "Con amor" },
-  { image: C24, label: "Bocados",         caption: "Para compartir" },
-  { image: C2,  label: "Entrada",         caption: "Bienvenida" },
-  { image: C9,  label: "Maridaje",        caption: "El detalle" },
-  { image: C13, label: "Especialidad",    caption: "Orgullosamente quiteño" },
-]
+// ── Paleta ─────────────────────────────────────────────────────────────────
 
 const colors = {
   crema:     "#F5F0E8",
@@ -46,58 +54,167 @@ const colors = {
   amarillo:  "#F4D799",
 }
 
-const GALLERY_TITLES: Record<RestaurantKey, string> = {
+// ── Labels UI ──────────────────────────────────────────────────────────────
+
+const RESTAURANT_LABELS: Record<RestaurantKey, string> = {
   "san-marcos": "San Marcos",
   "la-ronda":   "La Ronda",
 }
 
-function ParallaxMasonryGrid({ items, onOpen }: { items: GalleryItem[]; onOpen: (i: number) => void }) {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] })
+const CATEGORY_LABELS: Record<CategoryKey, string> = {
+  platos:  "Platos",
+  eventos: "Eventos",
+  local:   "Local",
+}
 
-  const col1Y = useTransform(scrollYProgress, [0, 1], isMobile ? ["0px", "0px"] : ["-70px", "70px"])
-  const col2Y = useTransform(scrollYProgress, [0, 1], isMobile ? ["0px", "0px"] : ["50px", "-50px"])
-  const col3Y = useTransform(scrollYProgress, [0, 1], isMobile ? ["0px", "0px"] : ["-90px", "90px"])
+// Qué categorías tiene cada restaurante
+const AVAILABLE_CATEGORIES: Record<RestaurantKey, CategoryKey[]> = {
+  "san-marcos": ["local", "platos"],          // Eventos pendiente de fotógrafo
+  "la-ronda":   ["local", "platos", "eventos"],
+}
 
-  const colYValues = [col1Y, col2Y, col3Y]
+// ── Datos de galería ────────────────────────────────────────────────────────
 
+const GALLERY: Record<RestaurantKey, Partial<Record<CategoryKey, GalleryItem[]>>> = {
+  "san-marcos": {
+    platos: [
+      { image: "/images/san_marcos/platos/C1.jpg.jpeg",  label: "A la leña",     caption: "Sabor auténtico" },
+      { image: "/images/san_marcos/platos/C2.jpg.jpeg",  label: "Del fogón",     caption: "Fuego y sazón" },
+      { image: "/images/san_marcos/platos/C3.jpg.jpeg",  label: "Plato estrella",caption: "Carne perfecta" },
+      { image: "/images/san_marcos/platos/C4.jpg.jpeg",  label: "Especialidad",  caption: "Orgullosamente quiteño" },
+    ],
+    local: [
+      { image: "/images/san_marcos/local/C70.jpg.jpeg",  label: "Ambiente",      caption: "San Marcos" },
+      { image: "/images/san_marcos/local/C73.jpg.jpeg",  label: "Espacio",       caption: "Tradición viva" },
+      { image: "/images/san_marcos/local/C74.jpg.jpeg",  label: "Detalle",       caption: "Con alma" },
+      { image: "/images/san_marcos/local/C76.jpg.jpeg",  label: "Rincón",        caption: "Quiteño de corazón" },
+      { image: "/images/san_marcos/local/C77.jpg.jpeg",  label: "Mesa",          caption: "Para compartir" },
+      { image: "/images/san_marcos/local/C81.jpg.jpeg",  label: "Salón",         caption: "Bienvenida" },
+      { image: "/images/san_marcos/local/C82.jpg.jpeg",  label: "Terraza",       caption: "Aire y sabor" },
+      { image: "/images/san_marcos/local/C84.jpg.jpeg",  label: "Entrada",       caption: "Patrimonio" },
+      { image: "/images/san_marcos/local/C85.jpg.jpeg",  label: "Interior",      caption: "Calidez" },
+      { image: "/images/san_marcos/local/C86.jpg.jpeg",  label: "Fogón",         caption: "El corazón" },
+      { image: "/images/san_marcos/local/C87.jpg.jpeg",  label: "Maridaje",      caption: "El detalle" },
+      { image: "/images/san_marcos/local/C89.jpg.jpeg",  label: "Noche",         caption: "Luz y leña" },
+    ],
+  },
+  "la-ronda": {
+    platos: [
+      { image: "/images/la_ronda/platos/C36.jpg.jpeg",   label: "Plato estrella",caption: "Sabor a leña" },
+      { image: "/images/la_ronda/platos/C37.jpg.jpeg",   label: "Del fogón",     caption: "Tradición viva" },
+      { image: "/images/la_ronda/platos/C38.jpg.jpeg",   label: "Corte",         caption: "Fuego y sazón" },
+      { image: "/images/la_ronda/platos/C51.jpg.jpeg",   label: "Alma quiteña",  caption: "Receta ancestral" },
+      { image: "/images/la_ronda/platos/C52.jpg.jpeg",   label: "A la brasa",    caption: "Carne perfecta" },
+      { image: "/images/la_ronda/platos/C53.jpg.jpeg",   label: "Bocados",       caption: "Para compartir" },
+    ],
+    eventos: [
+      { image: "/images/la_ronda/Eventos/C31.jpg.jpeg",  label: "Evento",        caption: "Momentos únicos" },
+      { image: "/images/la_ronda/Eventos/C33.jpg.jpeg",  label: "Celebración",   caption: "Con los tuyos" },
+      { image: "/images/la_ronda/Eventos/C39.jpg.jpeg",  label: "Reunión",       caption: "Espacio privado" },
+      { image: "/images/la_ronda/Eventos/C40.jpg.jpeg",  label: "Brindis",       caption: "Cada ocasión" },
+      { image: "/images/la_ronda/Eventos/C41.jpg.jpeg",  label: "Especial",      caption: "Tu momento" },
+      { image: "/images/la_ronda/Eventos/C47.jpg.jpeg",  label: "Grupo",         caption: "Juntos a la mesa" },
+      { image: "/images/la_ronda/Eventos/C65.jpg.jpeg",  label: "Noche",         caption: "Luz y leña" },
+    ],
+    local: [
+      { image: "/images/la_ronda/local/C26.jpg.jpeg",    label: "La Ronda",      caption: "Patrimonio vivo" },
+      { image: "/images/la_ronda/local/C28.jpg.jpeg",    label: "Ambiente",      caption: "Quito histórico" },
+      { image: "/images/la_ronda/local/C29.jpg.jpeg",    label: "Espacio",       caption: "Tradición y sabor" },
+      { image: "/images/la_ronda/local/C30.jpg.jpeg",    label: "Interior",      caption: "Calidez" },
+      { image: "/images/la_ronda/local/C43.jpg.jpeg",    label: "Rincón",        caption: "Con alma" },
+      { image: "/images/la_ronda/local/C44.jpg.jpeg",    label: "Salón",         caption: "Para todos" },
+      { image: "/images/la_ronda/local/C45.jpg.jpeg",    label: "Mesa",          caption: "Bienvenida" },
+      { image: "/images/la_ronda/local/C48.jpg.jpeg",    label: "Detalle",       caption: "El arte de recibir" },
+      { image: "/images/la_ronda/local/C57.jpg.jpeg",    label: "Terraza",       caption: "Aire libre" },
+      { image: "/images/la_ronda/local/C59.jpg.jpeg",    label: "Noche",         caption: "Magia nocturna" },
+      { image: "/images/la_ronda/local/C66.jpg.jpeg",    label: "Entrada",       caption: "La Ronda te espera" },
+    ],
+  },
+}
+
+// ── MasonryGrid ─────────────────────────────────────────────────────────────
+
+function MasonryGrid({
+  items,
+  onOpen,
+  gridRef,
+}: {
+  items:   GalleryItem[]
+  onOpen:  (i: number) => void
+  gridRef: React.RefObject<HTMLDivElement | null>
+}) {
+  // Reveal inicial: fade-in + y:50 en cascada al entrar al viewport
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".gallery-card", {
+        opacity: 0,
+        y: 50,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: "top 85%",
+          once: true,
+        },
+      })
+
+      // Parallax de columnas vinculado al scroll (solo desktop)
+      if (window.innerWidth >= 768) {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: "top bottom",
+            end:   "bottom top",
+            scrub: true,
+          },
+        })
+        tl.fromTo(".gallery-col-0", { y: 60 },  { y: -60 },  0)
+          .fromTo(".gallery-col-1", { y: -40 }, { y: 40 },   0)
+          .fromTo(".gallery-col-2", { y: 60 },  { y: -80 },  0)
+      }
+    }, gridRef)
+
+    return () => ctx.revert()
+  }, [items, gridRef])
+
+  // Distribuir items en 3 columnas por módulo 3
   const cols: GalleryItem[][] = [[], [], []]
   items.forEach((item, i) => cols[i % 3].push(item))
 
-  const colIndexOffset = [0, 1, 2]
-
   return (
-    <div ref={sectionRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 px-4 md:px-10 py-8">
+    <div
+      ref={gridRef}
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 px-4 md:px-10 py-8"
+    >
       {cols.map((col, colIdx) => (
-        <motion.div
-          key={colIdx}
-          style={{ y: colYValues[colIdx] }}
-          className="flex flex-col gap-3"
-        >
+        <div key={colIdx} className={`gallery-col-${colIdx} flex flex-col`}>
           {col.map((item, itemIdx) => {
-            const globalIdx = colIndexOffset[colIdx] + itemIdx * 3
-            const tall = (colIdx === 0 && itemIdx === 0) || (colIdx === 2 && itemIdx === 1)
+            const globalIdx = colIdx + itemIdx * 3
             return (
-              <motion.div
+              <div
                 key={itemIdx}
-                className="relative overflow-hidden cursor-pointer group"
-                style={{ aspectRatio: tall ? "3/4" : "4/3" }}
+                className="gallery-card group relative overflow-hidden rounded-sm cursor-pointer"
+                style={{
+                  backgroundColor: colors.crema,
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+                }}
                 onClick={() => onOpen(globalIdx)}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-5%" }}
-                transition={{ duration: 0.7, delay: colIdx * 0.1, ease: [0.22, 1, 0.36, 1] }}
               >
-                <img
-                  src={item.image}
-                  alt={item.label}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
+                <div className="relative aspect-3/4 md:aspect-auto overflow-hidden bg-black/5">
+                  <img
+                    src={item.image}
+                    alt={item.label}
+                    className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
+                    style={{ maxHeight: "750px" }}
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* Overlay hover con deslizamiento suave */}
                 <div
-                  className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(to top, ${colors.cafe}CC 0%, transparent 60%)` }}
+                  className="absolute inset-0 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0"
+                  style={{ background: `linear-gradient(to top, ${colors.cafe}E6 0%, transparent 70%)` }}
                 >
                   <span className="text-[10px] uppercase tracking-[0.4em] font-bold" style={{ color: colors.dorado }}>
                     {item.label}
@@ -106,27 +223,131 @@ function ParallaxMasonryGrid({ items, onOpen }: { items: GalleryItem[]; onOpen: 
                     {item.caption}
                   </span>
                 </div>
+
                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Maximize2 size={16} style={{ color: `${colors.crema}CC` }} />
+                  <Maximize2 size={16} className="text-white/70" />
                 </div>
-              </motion.div>
+              </div>
             )
           })}
-        </motion.div>
+        </div>
       ))}
     </div>
   )
 }
 
+// ── Galeria (componente principal) ──────────────────────────────────────────
+
 export default function Galeria() {
   const { selectedRestaurant } = useRestaurant()
-  const [activeTab, setActiveTab]   = useState<RestaurantKey>("san-marcos")
-  const [lightbox, setLightbox]     = useState<number | null>(null)
-  const [animating, setAnimating]   = useState(false)
 
+  const [activeTab,      setActiveTab]      = useState<RestaurantKey>("san-marcos")
+  const [activeCategory, setActiveCategory] = useState<CategoryKey>("platos")
+  const [lightbox,       setLightbox]       = useState<number | null>(null)
+  const [animating,      setAnimating]      = useState(false)
+
+  const gridWrapperRef    = useRef<HTMLDivElement>(null)
+  const gridRef           = useRef<HTMLDivElement>(null)
+  const activeCategoryRef = useRef(activeCategory)
+  const activeTabRef      = useRef(activeTab)
+
+  // Mantener refs sincronizados para el intervalo
+  useEffect(() => { activeCategoryRef.current = activeCategory }, [activeCategory])
+  useEffect(() => { activeTabRef.current = activeTab }, [activeTab])
+
+  // Auto-rotate de categoría cada 15 segundos
   useEffect(() => {
-    if (selectedRestaurant) setActiveTab(selectedRestaurant)
+    const id = setInterval(() => {
+      const available = AVAILABLE_CATEGORIES[activeTabRef.current]
+      const currentIdx = available.indexOf(activeCategoryRef.current)
+      const nextCat = available[(currentIdx + 1) % available.length]
+
+      if (!gridWrapperRef.current) return
+      gsap.to(gridWrapperRef.current, {
+        opacity: 0,
+        y: -20,
+        duration: 0.25,
+        ease: "power2.in",
+        onComplete: () => {
+          setActiveCategory(nextCat)
+          setLightbox(null)
+          gsap.fromTo(
+            gridWrapperRef.current,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }
+          )
+        },
+      })
+    }, 15000)
+
+    return () => clearInterval(id)
+  }, [])
+
+  // Sincroniza tab con el restaurante seleccionado globalmente
+  useEffect(() => {
+    if (selectedRestaurant) setActiveTab(selectedRestaurant as RestaurantKey)
   }, [selectedRestaurant])
+
+  // Al cambiar de restaurante, reinicia categoría si no está disponible
+  useEffect(() => {
+    const available = AVAILABLE_CATEGORIES[activeTab]
+    if (!available.includes(activeCategory)) setActiveCategory(available[0])
+    animateTransition()
+  }, [activeTab])
+
+  // Anima la transición del grid al cambiar tab o categoría
+  const animateTransition = () => {
+    if (!gridWrapperRef.current) return
+    gsap.fromTo(
+      gridWrapperRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }
+    )
+  }
+
+  const handleCategoryChange = (cat: CategoryKey) => {
+    if (cat === activeCategory) return
+    if (!gridWrapperRef.current) return
+
+    // Fade-out → cambio de estado → fade-in
+    gsap.to(gridWrapperRef.current, {
+      opacity: 0,
+      y: -20,
+      duration: 0.25,
+      ease: "power2.in",
+      onComplete: () => {
+        setActiveCategory(cat)
+        setLightbox(null)
+        gsap.fromTo(
+          gridWrapperRef.current,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }
+        )
+      },
+    })
+  }
+
+  const handleTabChange = (tab: RestaurantKey) => {
+    if (tab === activeTab) return
+    if (!gridWrapperRef.current) return
+
+    gsap.to(gridWrapperRef.current, {
+      opacity: 0,
+      y: -20,
+      duration: 0.25,
+      ease: "power2.in",
+      onComplete: () => {
+        setActiveTab(tab)
+        setLightbox(null)
+      },
+    })
+  }
+
+  // Items actuales según restaurante + categoría
+  const currentItems: GalleryItem[] =
+    GALLERY[activeTab]?.[activeCategory] ?? []
+
+  // ── Lightbox ──────────────────────────────────────────────────────────────
 
   const openLightbox = (idx: number) => {
     setLightbox(idx)
@@ -144,10 +365,10 @@ export default function Galeria() {
     setTimeout(() => setAnimating(false), 400)
     setLightbox((prev) => {
       if (prev === null) return prev
-      const len = FOOD_ITEMS.length
+      const len = currentItems.length
       return dir === "next" ? (prev + 1) % len : (prev - 1 + len) % len
     })
-  }, [lightbox, animating])
+  }, [lightbox, animating, currentItems.length])
 
   useEffect(() => {
     if (lightbox === null) return
@@ -160,14 +381,14 @@ export default function Galeria() {
     return () => window.removeEventListener("keydown", handler)
   }, [lightbox, navigate, closeLightbox])
 
-  useEffect(() => { setLightbox(null) }, [activeTab])
+  const activeItem = lightbox !== null ? currentItems[lightbox] : null
 
-  const activeItem = lightbox !== null ? FOOD_ITEMS[lightbox] : null
+  // ── Render ────────────────────────────────────────────────────────────────
 
   return (
     <section id="galeria" className="overflow-hidden pb-8" style={{ backgroundColor: colors.cremaDark }}>
 
-      {/* HEADER */}
+      {/* ── HEADER ── */}
       <motion.div
         className="max-w-3xl mx-auto text-center pt-16 pb-8 px-4"
         initial={{ opacity: 0, y: 40 }}
@@ -182,7 +403,6 @@ export default function Galeria() {
           </span>
           <span className="block w-12 h-px" style={{ backgroundColor: `${colors.dorado}50` }} />
         </div>
-
         <h2
           className="font-playfair font-bold leading-tight mb-5"
           style={{ color: colors.cafeClaro, fontSize: "clamp(2.2rem, 5vw, 3.5rem)" }}
@@ -190,7 +410,6 @@ export default function Galeria() {
           Un Viaje en cada{" "}
           <span style={{ color: colors.vino }}>Bocado</span>
         </h2>
-
         <div className="flex items-center justify-center gap-3">
           <span className="block h-px w-20" style={{ backgroundColor: `${colors.dorado}40` }} />
           <span className="block w-1.5 h-1.5 rotate-45" style={{ backgroundColor: colors.dorado }} />
@@ -198,9 +417,9 @@ export default function Galeria() {
         </div>
       </motion.div>
 
-      {/* TABS */}
+      {/* ── TABS RESTAURANTE ── */}
       <motion.div
-        className="flex justify-center gap-20 mb-4 px-4"
+        className="flex justify-center gap-20 mb-6 px-4"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -209,14 +428,14 @@ export default function Galeria() {
         {(["san-marcos", "la-ronda"] as RestaurantKey[]).map((key) => (
           <button
             key={key}
-            onClick={() => setActiveTab(key)}
+            onClick={() => handleTabChange(key)}
             className="cursor-pointer flex flex-col items-center gap-2.5 transition-all duration-300"
           >
             <span
               className="font-cinzel font-cinzel-medium text-xs md:text-sm uppercase tracking-[0.5em] transition-colors duration-300"
               style={{ color: activeTab === key ? colors.vino : `${colors.cafe}55` }}
             >
-              {GALLERY_TITLES[key]}
+              {RESTAURANT_LABELS[key]}
             </span>
             <motion.div
               className="h-0.5"
@@ -228,10 +447,48 @@ export default function Galeria() {
         ))}
       </motion.div>
 
-      {/* PARALLAX MASONRY */}
-      <ParallaxMasonryGrid items={FOOD_ITEMS} onOpen={openLightbox} />
+      {/* ── CATEGORÍA ACTIVA ── */}
+      <motion.div
+        key={activeCategory}
+        className="text-center mb-4 px-4"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        <span
+          className="font-playfair italic"
+          style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", color: colors.cafeClaro, opacity: 0.75 }}
+        >
+          {CATEGORY_LABELS[activeCategory]}
+        </span>
+        <div className="flex items-center justify-center gap-4 mt-4">
+          <span className="block h-0.5 flex-1 max-w-[45%]" style={{ background: "linear-gradient(to right, transparent, rgba(0,0,0,0.2))" }} />
+          <span className="block w-2.5 h-2.5 rotate-45 shrink-0" style={{ backgroundColor: "rgba(0,0,0,0.2)" }} />
+          <span className="block h-0.5 flex-1 max-w-[45%]" style={{ background: "linear-gradient(to left, transparent, rgba(0,0,0,0.2))" }} />
+        </div>
+      </motion.div>
 
-      {/* LIGHTBOX */}
+      {/* ── GRID ── */}
+      <div ref={gridWrapperRef}>
+        {currentItems.length > 0 ? (
+          <MasonryGrid
+            items={currentItems}
+            onOpen={openLightbox}
+            gridRef={gridRef}
+          />
+        ) : (
+          // Placeholder mientras no hay fotos (ej. Eventos San Marcos)
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <span className="block w-10 h-px" style={{ backgroundColor: `${colors.dorado}50` }} />
+            <p className="font-cinzel text-xs uppercase tracking-[0.4em]" style={{ color: `${colors.cafe}55` }}>
+              Próximamente
+            </p>
+            <span className="block w-10 h-px" style={{ backgroundColor: `${colors.dorado}50` }} />
+          </div>
+        )}
+      </div>
+
+      {/* ── LIGHTBOX ── */}
       {lightbox !== null && activeItem && (
         <motion.div
           className="fixed inset-0 z-100 flex items-center justify-center p-4 md:p-12"
@@ -297,7 +554,7 @@ export default function Galeria() {
                 {activeItem.caption}
               </h3>
               <div className="mt-4 font-mono text-xs tracking-[0.3em]" style={{ color: `${colors.cremaDark}80` }}>
-                {String((lightbox ?? 0) + 1).padStart(2, "0")} / {String(FOOD_ITEMS.length).padStart(2, "0")}
+                {String((lightbox ?? 0) + 1).padStart(2, "0")} / {String(currentItems.length).padStart(2, "0")}
               </div>
             </div>
           </motion.div>

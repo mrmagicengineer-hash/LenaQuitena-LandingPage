@@ -75,7 +75,7 @@ const HeroContent = () => {
             Elige un Restaurante
           </h2>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 w-full max-w-3xl">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-10 w-full max-w-3xl">
 
             {RESTAURANT_CARDS.map((card, idx) => {
               const isSelected = selectedRestaurant === card.key
@@ -95,7 +95,7 @@ const HeroContent = () => {
                     disabled={!!launching}
                     className={[
                       "group relative flex flex-col items-center justify-between",
-                      "w-56 md:w-60 h-[280px] p-6 rounded-none cursor-pointer", // Bordes rectos
+                      "w-52 md:w-60 h-50 sm:h-60 md:h-70 p-4 md:p-6 rounded-none cursor-pointer",
                       "backdrop-blur-md outline-none",
                       "transition-all duration-500 ease-out",
                       isLaunching
@@ -122,7 +122,7 @@ const HeroContent = () => {
                     <div className="flex-1 flex items-center justify-center w-full mt-2">
                       <div
                         className={[
-                          "flex h-24 w-24 items-center justify-center overflow-hidden rounded-none bg-white p-2 shadow-inner",
+                          "flex h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 items-center justify-center overflow-hidden rounded-none bg-white p-2 shadow-inner",
                           "transition-transform duration-500",
                           isLaunching ? "scale-115" : isSelected ? "scale-110" : "group-hover:scale-105",
                         ].join(" ")}

@@ -100,7 +100,7 @@ export default function Resenas() {
           {TESTIMONIOS.map((item, i) => (
             <motion.article
               key={i}
-              className="relative flex flex-col justify-between p-12 cursor-default group min-h-105"
+              className="relative flex flex-col justify-between p-6 md:p-12 cursor-default group min-h-fit md:min-h-105"
               style={{
                 backgroundColor: "rgba(61,31,31,0.04)",
                 border: "1px solid rgba(186,117,23,0.3)",
@@ -127,7 +127,7 @@ export default function Resenas() {
 
               {/* Texto reseña */}
               <p
-                className="flex-1 text-2xl md:text-3xl leading-relaxed mb-10"
+                className="flex-1 text-lg md:text-2xl lg:text-3xl leading-relaxed mb-6 md:mb-10"
                 style={{
                   color: "#5C3A2E",
                   opacity: 0.88,

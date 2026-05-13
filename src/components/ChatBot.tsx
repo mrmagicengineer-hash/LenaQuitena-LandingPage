@@ -73,8 +73,8 @@ const OPT_PROMOS  = 'Promociones';
 const OPT_HORARIOS = 'Horarios';
 const OPT_CONTACTO = 'Contacto';
 const OPT_UBICACION = 'Ubicación';
-const OPT_RESENA   = 'Publica una reseña';
-const MAIN_OPTIONS = [OPT_PROMOS, OPT_HORARIOS, OPT_CONTACTO, OPT_UBICACION, OPT_RESENA];
+const OPT_RESERVAS = 'Reservas';
+const MAIN_OPTIONS = [OPT_PROMOS, OPT_HORARIOS, OPT_CONTACTO, OPT_UBICACION, OPT_RESERVAS];
 
 function getBotResponse(userMessage: string, t: Translator): { text: string; options?: string[]; action?: string } {
   const msg = userMessage.toLowerCase();
@@ -183,7 +183,7 @@ export function ChatBot() {
   OPTION_ICON_MAP[OPT_HORARIOS] = IconClock;
   OPTION_ICON_MAP[OPT_CONTACTO] = IconPhone;
   OPTION_ICON_MAP[OPT_UBICACION] = IconMapPin;
-  OPTION_ICON_MAP[OPT_RESENA]   = () => (<svg {...iconProps}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>);
+  OPTION_ICON_MAP[OPT_RESERVAS] = IconCalendar;
   OPTION_ICON_MAP[t('chat.option.back')] = IconArrowLeft;
   OPTION_ICON_MAP[t('chat.reservation.locale.san_marcos')] = IconMapPin;
   OPTION_ICON_MAP[t('chat.reservation.locale.la_ronda')]   = IconMapPin;
@@ -210,6 +210,7 @@ export function ChatBot() {
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [showWaMenu, setShowWaMenu] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
   const [promoIndex, setPromoIndex] = useState(0);
   const [messages, setMessages] = useState<Message[]>([getInitialMessage()]);
@@ -595,17 +596,17 @@ export function ChatBot() {
 
   return (
     <>
-      {/* ── Floating button + tooltip ── */}
+      {/* ── Chat floating button + tooltip ── */}
       <AnimatePresence>
         {!isOpen && (
           <motion.div
-            className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2.5 md:bottom-6 md:right-6 md:gap-3"
+            className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2.5 md:bottom-6 md:right-6"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 20 }}
           >
-            {/* Tooltip — above the button */}
+            {/* Tooltip */}
             <AnimatePresence mode="wait">
               {showTooltip && (
                 <Tooltip
@@ -618,34 +619,77 @@ export function ChatBot() {
 
             {/* Chat Button */}
             <div className="relative flex items-center justify-center">
-              <span className="absolute size-16 rounded-full border-2 border-[#8b121b]/60 animate-[ping_2s_ease-out_infinite] md:size-20" />
-              <span className="absolute size-16 rounded-full border-2 border-[#c4922a]/40 animate-[ping_2s_ease-out_0.7s_infinite] md:size-20" />
+              <span className="absolute size-14 rounded-full border-2 border-[#8b121b]/60 animate-[ping_2s_ease-out_infinite] md:size-16" />
+              <span className="absolute size-14 rounded-full border-2 border-[#c4922a]/40 animate-[ping_2s_ease-out_0.7s_infinite] md:size-16" />
               <button
                 onClick={() => { setIsOpen(true); setShowTooltip(false); }}
-                className="relative size-16 rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_24px_rgba(139,18,27,0.6)] transition-all duration-300 hover:shadow-[0_4px_36px_rgba(139,18,27,0.8)] hover:scale-105 md:size-20"
+                className="relative size-14 rounded-full flex items-center justify-center overflow-hidden shadow-[0_4px_24px_rgba(139,18,27,0.6)] transition-all duration-300 hover:shadow-[0_4px_36px_rgba(139,18,27,0.8)] hover:scale-105 md:size-16"
                 style={{ background: 'radial-gradient(circle at 40% 35%, #c4922a 0%, #8b121b 55%, #3d0c0c 100%)' }}
                 aria-label="Abrir chat"
               >
-                <MessageCircle className="size-7 text-[#f5e6c8] md:size-9" fill="#f5e6c8" />
+                <MessageCircle className="size-6 text-[#f5e6c8] md:size-8" fill="#f5e6c8" />
                 <span className="pointer-events-none absolute inset-0 rounded-full bg-linear-to-br from-white/20 to-transparent" />
               </button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-            {/* WhatsApp Button */}
-            <a
-              href="https://wa.me/593987579515"
-              target="_blank"
-              rel="noopener noreferrer"
+      {/* ── WhatsApp floating button + picker ── */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.div
+            className="fixed bottom-24 right-4 z-50 md:bottom-28 md:right-6 flex flex-col items-end gap-2"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.05 }}
+          >
+            {/* Restaurant picker */}
+            <AnimatePresence>
+              {showWaMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex flex-col gap-2 items-end"
+                >
+                  {[
+                    { name: 'San Marcos', number: '593999033084' },
+                    { name: 'La Ronda',   number: '593987579515' },
+                  ].map((r) => (
+                    <a
+                      key={r.name}
+                      href={`https://wa.me/${r.number}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setShowWaMenu(false)}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white shadow-lg whitespace-nowrap"
+                      style={{ background: 'linear-gradient(135deg, #25d366, #128c4e)' }}
+                    >
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                      </svg>
+                      {r.name}
+                    </a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* WhatsApp button */}
+            <button
+              onClick={() => setShowWaMenu((v) => !v)}
               aria-label="Contactar por WhatsApp"
-              className="relative size-14 rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.45)] transition-all duration-300 hover:scale-105 hover:shadow-[0_4px_30px_rgba(37,211,102,0.65)] md:size-16"
+              className="relative size-14 rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.45)] transition-all duration-300 hover:scale-105 hover:shadow-[0_4px_30px_rgba(37,211,102,0.65)] md:size-16 cursor-pointer"
               style={{ background: 'radial-gradient(circle at 40% 35%, #4ade80 0%, #25d366 50%, #128c4e 100%)' }}
             >
               <svg viewBox="0 0 24 24" fill="currentColor" className="size-7 text-white md:size-8" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
-              {/* Shine */}
               <span className="pointer-events-none absolute inset-0 rounded-full bg-linear-to-br from-white/20 to-transparent" />
-            </a>
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -751,7 +795,13 @@ export function ChatBot() {
                             return (
                               <button
                                 key={opt}
-                                onClick={() => sendMessage(opt)}
+                                onClick={() => {
+                                  if (opt === OPT_RESERVAS) {
+                                    window.dispatchEvent(new CustomEvent('open-reservation-modal'));
+                                    return;
+                                  }
+                                  sendMessage(opt);
+                                }}
                                 className="rounded-lg px-2.5 py-2 text-left text-[13px] transition-all duration-200 hover:scale-[1.02] active:scale-95 flex items-center gap-2"
                                 style={{
                                   fontFamily: "'Nunito Variable', sans-serif",

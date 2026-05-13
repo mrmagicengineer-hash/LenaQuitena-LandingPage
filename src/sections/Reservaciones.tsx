@@ -167,7 +167,7 @@ export default function Reservaciones() {
             </div>
 
             {sent ? (
-              <div className="reserva-modal-body" style={{ textAlign: "center", padding: "3rem 2rem" }}>
+              <div className="reserva-modal-body" style={{ textAlign: "center", padding: "clamp(1.5rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem)" }}>
                 <div className="reserva-confirmacion-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                 </div>
